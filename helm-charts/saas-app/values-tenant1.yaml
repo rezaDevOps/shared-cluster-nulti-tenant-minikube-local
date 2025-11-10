@@ -1,0 +1,16 @@
+tenant:
+  id: "1"
+  name: "Acme Corporation"
+  subdomain: "tenant1"
+
+postgresql:
+  auth:
+    database: tenant1_db
+    username: tenant1_user
+
+ingress:
+  hosts:
+    - host: tenant1.saas-platform.local
+      paths:
+        - path: /
+          pathType: Prefix

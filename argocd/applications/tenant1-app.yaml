@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant1-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: saas-platform
+  source:
+    repoURL: https://github.com/your-org/saas-platform
+    targetRevision: HEAD
+    path: helm-charts/saas-app
+    helm:
+      valueFiles:
+      - values.yaml
+      - values-tenant1.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tenant1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+  revisionHistoryLimit: 5

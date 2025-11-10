@@ -1,0 +1,85 @@
+# Default values for saas-app
+replicaCount: 2
+
+image:
+  repository: saas-app
+  pullPolicy: Never  # For minikube local images, use IfNotPresent for remote images
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Tenant configuration
+tenant:
+  id: "default"
+  name: "Default Tenant"
+  subdomain: "app"
+
+# Database configuration
+database:
+  host: "postgresql"
+  port: 5432
+  name: "saasdb"
+  
+postgresql:
+  enabled: true
+  auth:
+    username: saasuser
+    password: "saaspass123"  # Change this in production
+    database: saasdb
+    existingSecret: ""
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - host: "{{ .Values.tenant.subdomain }}.saas-platform.local"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+# Argo Rollouts configuration
+rollout:
+  enabled: true
+  strategy:
+    canary:
+      maxSurge: "25%"
+      maxUnavailable: "25%"
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 50
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true

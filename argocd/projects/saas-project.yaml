@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: saas-platform
+  namespace: argocd
+spec:
+  description: Multi-tenant SaaS platform project
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: 'tenant*'
+    server: https://kubernetes.default.svc
+  - namespace: saas-platform
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  - group: networking.k8s.io
+    kind: NetworkPolicy
+  namespaceResourceWhitelist:
+  - group: ''
+    kind: '*'
+  - group: apps
+    kind: '*'
+  - group: argoproj.io
+    kind: '*'
+  - group: networking.k8s.io
+    kind: '*'
+  roles:
+  - name: platform-admin
+    description: Platform administrators
+    policies:
+    - p, proj:saas-platform:platform-admin, applications, *, saas-platform/*, allow
+    groups:
+    - platform-admins

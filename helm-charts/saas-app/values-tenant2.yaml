@@ -1,0 +1,16 @@
+tenant:
+  id: "2"
+  name: "Global Solutions Inc"
+  subdomain: "tenant2"
+
+postgresql:
+  auth:
+    database: tenant2_db
+    username: tenant2_user
+
+ingress:
+  hosts:
+    - host: tenant2.saas-platform.local
+      paths:
+        - path: /
+          pathType: Prefix
