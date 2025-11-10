@@ -8,7 +8,7 @@ metadata:
 spec:
   project: saas-platform
   source:
-    repoURL: https://github.com/your-org/saas-platform
+    repoURL: https://github.com/rezaDevOps/shared-cluster-nulti-tenant-minikube-local.git
     targetRevision: HEAD
     path: helm-charts/saas-app
     helm:
