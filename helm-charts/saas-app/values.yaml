@@ -33,7 +33,7 @@ postgresql:
     repository: bitnami/postgresql
     tag: "16"
     digest: ""
-    pullPolicy: IfNotPresent
+    pullPolicy: Never
   primary:
     persistence:
       enabled: true
