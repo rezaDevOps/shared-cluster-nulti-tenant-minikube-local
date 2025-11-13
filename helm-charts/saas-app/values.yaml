@@ -28,6 +28,12 @@ postgresql:
     password: "saaspass123"  # Change this in production
     database: saasdb
     existingSecret: ""
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: "16"
+    digest: ""
+    pullPolicy: IfNotPresent
   primary:
     persistence:
       enabled: true
